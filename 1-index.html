@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>خلية دانيال - محاكاة تفاعلية | كيمياء 3 ثانوي</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Tahoma,Arial,sans-serif;background:#f0f4f8;color:#1a202c;line-height:1.7}
+header{background:linear-gradient(135deg,#0d3b66,#1464a0);color:#fff;padding:18px 14px;text-align:center}
+header h1{font-size:19px;margin-bottom:4px}
+header p{font-size:12px;opacity:.9}
+.src{display:inline-block;background:rgba(255,255,255,.15);border-radius:8px;padding:2px 10px;font-size:11px;margin-top:6px}
+nav{display:flex;flex-wrap:wrap;gap:6px;padding:8px;background:#fff;position:sticky;top:0;z-index:50;box-shadow:0 2px 4px rgba(0,0,0,.08)}
+nav button{flex:1 46%;border:2px solid #1464a0;background:#fff;color:#0d3b66;border-radius:10px;padding:8px 4px;font-size:14px;font-weight:bold;cursor:pointer;font-family:inherit}
+nav button.on{background:#1464a0;color:#fff}
+.tab{display:none;padding:12px}
+.tab.on{display:block}
+.card{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.card h2{font-size:16px;color:#0d3b66;margin-bottom:8px}
+.pg{display:inline-block;background:#e8f0fe;color:#0d3b66;border-radius:6px;padding:0 8px;font-size:11px;margin-bottom:6px}
+.src2{display:inline-block;background:#fff8e1;border:1px dashed #e6a817;border-radius:8px;padding:6px 10px;font-size:12px;color:#7a5b00;margin-top:8px}
+.note{background:#e6ffed;border:1px dashed #2f9e44;border-radius:10px;padding:10px;font-size:13px;margin-top:8px;display:none}
+.warn{background:#fff5f5;border:1px dashed #c92a2a;border-radius:10px;padding:10px;font-size:13px;margin-top:8px}
+.btn{background:#1464a0;color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:15px;font-weight:bold;cursor:pointer;font-family:inherit}
+.btn.sec{background:#fff;color:#1464a0;border:2px solid #1464a0}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0}.btnrow.tight{gap:6px;margin:8px 0}.btnrow.tight .btn{padding:8px 10px;font-size:13px;flex:1 1 42%;border-radius:10px}.btnrow.tight .opt.btn{width:auto;display:inline-block;text-align:center;border-width:1px;background:#eef4fb}
+svg{display:block;margin:0 auto;max-width:100%}
+.opt{display:block;width:100%;text-align:right;background:#f7fafc;border:2px solid #cbd5e0;border-radius:10px;padding:9px;margin:6px 0;font-size:14px;cursor:pointer;font-family:inherit}
+.opt.right{background:#c6f6d5;border-color:#2f9e44}
+.opt.wrong{background:#fed7d7;border-color:#c92a2a}
+.qcard{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.qcard h3{font-size:15px;margin-bottom:6px}
+.fb{border-radius:10px;padding:10px;font-size:13px;margin-top:8px;display:none}
+.fb.ok{display:block;background:#c6f6d5;border:1px dashed #2f9e44}
+.fb.no{display:block;background:#fed7d7;border:1px dashed #c92a2a}
+.reveal{background:#fff8e1;border:1px dashed #e6a817;color:#7a5b00;border-radius:10px;padding:9px;margin:8px 0;font-size:13px;cursor:pointer;text-align:center;font-weight:bold}
+.ans{background:#fffbe6;border-radius:8px;padding:8px;font-size:13px;display:none;margin:-4px 0 8px}
+.terms span{display:inline-block;background:#e8f0fe;border:1px solid #1464a0;color:#0d3b66;border-radius:8px;padding:4px 10px;margin:3px;font-size:13px;cursor:pointer}
+.termdef{background:#f0f9ff;border:1px solid #1464a0;border-radius:10px;padding:10px;font-size:13px;margin-top:8px;display:none}
+.eq{direction:ltr;text-align:center;background:#f7fafc;border-radius:8px;padding:8px;font-size:15px;margin:8px 0}
+footer{text-align:center;font-size:11px;color:#718096;padding:14px}
+.scorebox{text-align:center;font-size:16px;font-weight:bold;color:#0d3b66;margin:8px 0}
+.lbl{font-size:12px;font-weight:bold}
+</style>
+</head>
+<body>
+<header>
+<h1>خلية دانيال - محاكاة تفاعلية</h1>
+<p>الكيمياء الكهربية • الباب الرابع • الدرس الأول • كيمياء 3 ثانوي</p>
+<span class="src">المصدر: كتاب الشرح (الكيمياء العامة) - الجزء الأول 2027 - ص 257–265</span>
+</header>
+<nav>
+<button data-t="sim" class="on">التجربة</button>
+<button data-t="exp">الشرح</button>
+<button data-t="exr">تمرين</button>
+<button data-t="quiz">اختبر نفسك</button>
+</nav>
+
+<!-- ============ TAB 1: SIMULATION ============ -->
+<div id="sim" class="tab on">
+<div class="card">
+<h2>شغّل الخلية وشاهد بنفسك</h2>
+<span class="pg">ص 261–265</span>
+<p style="font-size:12px;margin-bottom:4px">شاهد الإلكترونات تتحرك في السلك والأيونات في القنطرة بينما تعمل الخلية.</p>
+</div>
+
+<div id="cellWrap">
+<svg id="cellSvg" viewBox="0 0 360 300" width="360" height="300">
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#c92a2a"/></marker></defs>
+<!-- wires -->
+<path d="M82,120 L82,52 L160,52" stroke="#333" stroke-width="2.5" fill="none"/>
+<path d="M200,52 L278,52 L278,120" stroke="#333" stroke-width="2.5" fill="none"/>
+<!-- voltmeter -->
+<circle cx="180" cy="52" r="20" fill="#fff" stroke="#333" stroke-width="2"/>
+<text x="180" y="57" text-anchor="middle" font-size="11" font-weight="bold" id="voltText">V</text>
+<line id="needle" x1="180" y1="52" x2="180" y2="36" stroke="#c92a2a" stroke-width="2"/>
+<!-- salt bridge -->
+<path id="bridge" d="M118,215 L118,150 Q180,112 242,150 L242,215" stroke="#9db2c9" stroke-width="16" fill="none" stroke-linecap="round" opacity="0.85"/>
+<text id="bridgeLbl" x="180" y="128" text-anchor="middle" font-size="10" fill="#0d3b66">القنطرة الملحية</text>
+<!-- beakers -->
+<path d="M40,150 L40,262 Q40,270 48,270 L132,270 Q140,270 140,262 L140,150" stroke="#666" stroke-width="2.5" fill="none"/>
+<path d="M220,150 L220,262 Q220,270 228,270 L312,270 Q312,270 312,262 L320,262 L320,150" stroke="#666" stroke-width="2.5" fill="none"/>
+<rect id="znSol" x="44" y="170" width="92" height="96" fill="#cbd5e0" opacity="0.55"/>
+<rect id="cuSol" x="224" y="170" width="92" height="96" fill="#2b6cb0" opacity="0.5"/>
+<text x="90" y="285" text-anchor="middle" font-size="10">ZnSO₄ (1M)</text>
+<text x="270" y="285" text-anchor="middle" font-size="10">CuSO₄ (1M)</text>
+<!-- electrodes -->
+<rect id="znRod" x="74" y="115" width="16" height="110" fill="#8d99ae" stroke="#555"/>
+<rect id="cuRod" x="270" y="115" width="16" height="110" fill="#b08d57" stroke="#6b4f2a"/>
+<text x="82" y="108" text-anchor="middle" font-size="11" font-weight="bold">Zn</text>
+<text x="278" y="108" text-anchor="middle" font-size="11" font-weight="bold">Cu</text>
+<text id="anodeLbl" x="82" y="245" text-anchor="middle" font-size="9" fill="#c92a2a">الأنود (−)</text>
+<text id="cathLbl" x="278" y="245" text-anchor="middle" font-size="9" fill="#2f9e44">الكاثود (+)</text>
+<!-- charge accumulation markers (hidden) -->
+<g id="accum" opacity="0">
+<text x="60" y="200" font-size="14" fill="#c92a2a" id="plusAcc">+ + +</text>
+<text x="288" y="200" font-size="14" fill="#0d3b66" id="minusAcc">− − −</text>
+</g>
+<g id="dots"></g>
+</svg>
+</div>
+<div id="directWrap" style="display:none">
+<svg viewBox="0 0 360 240" width="360" height="240">
+<path d="M110,60 L110,200 Q110,208 118,208 L242,208 Q250,208 250,200 L250,60" stroke="#666" stroke-width="2.5" fill="none"/>
+<rect id="dirSol" x="114" y="80" width="132" height="124" fill="#2b6cb0" opacity="0.5"/>
+<rect id="dirZn" x="165" y="40" width="18" height="150" fill="#8d99ae" stroke="#555"/>
+<text x="174" y="34" text-anchor="middle" font-size="11" font-weight="bold">ساق الزنك</text>
+<text x="180" y="228" text-anchor="middle" font-size="10">محلول CuSO₄ الأزرق</text>
+<g id="heat" opacity="0">
+<path d="M120,120 q5,-8 10,0 q5,8 10,0" stroke="#e8590c" stroke-width="2" fill="none"/>
+<path d="M215,140 q5,-8 10,0 q5,8 10,0" stroke="#e8590c" stroke-width="2" fill="none"/>
+<path d="M130,170 q5,-8 10,0 q5,8 10,0" stroke="#e8590c" stroke-width="2" fill="none"/>
+<text x="180" y="100" text-anchor="middle" font-size="11" fill="#e8590c" font-weight="bold">طاقة حرارية</text>
+</g>
+<g id="dirDots"></g>
+</svg>
+</div>
+<div class="btnrow tight">
+<button class="btn" id="runBtn">تشغيل</button>
+<button class="btn sec" id="resetBtn">إعادة</button>
+<button class="btn sec" id="bridgeBtn">أزل القنطرة الملحية</button>
+<button class="btn sec" id="directBtn">تلامس مباشر (ص 261)</button>
+</div>
+<div class="fb" id="simFb"></div>
+<div id="predBox" style="margin-top:2px">توقّع قبل التشغيل: عند غلق الدائرة تتحرك الإلكترونات في السلك الخارجي من:<div class="btnrow tight"><button class="opt btn" data-p="1"><bdi>Zn &rarr; Cu</bdi></button><button class="opt btn" data-p="2"><bdi>Cu &rarr; Zn</bdi></button><button class="opt btn" data-p="3">لا تتحرك</button></div><div class="fb" id="predFb"></div></div>
+<div class="src2">ملاحظة علمية: قراءة الفولتمتر ‏1.1 فولت‏ هي فرق الجهد القياسي في الظروف القياسية (تركيز 1M ودرجة حرارة 25°س) كما في الكتاب - ص 265؛ وتتغير القيمة بتغير التركيز ودرجة الحرارة. حركة الجسيمات والألوان هنا تمثيل توضيحي مبسّط، وليست قياسات حقيقية. الإلكترونات تتحرك في السلك الخارجي فقط، أما داخل المحلول والقنطرة فتتحرك الأيونات.</div>
+</div>
+</div>
+
+<!-- ============ TAB 2: EXPLANATION ============ -->
+<div id="exp" class="tab">
+<div class="card">
+<h2>١) الأكسدة والاختزال: انتقال الإلكترونات</h2>
+<span class="pg">ص 260</span>
+<p>عملية <b>الأكسدة</b>: فقد إلكترونات. وعملية <b>الاختزال</b>: اكتساب إلكترونات.</p>
+<p>العامل المختزَل هو الذي يفقد الإلكترونات (يُتأكسَد)، والعامل المؤكسِد هو الذي يكتسبها (يُختزَل).</p>
+<div class="eq">Mg + 2HCl ⟶ MgCl₂ + H₂</div>
+<div class="reveal" data-a="r1">اكتب نصفَي التفاعل وحدّد العاملين - اضغط للإجابة</div>
+<div class="ans" id="r1">نصف الأكسدة: ‏Mg ⟶ Mg²⁺ + 2e⁻‏ • نصف الاختزال: ‏2H⁺ + 2e⁻ ⟶ H₂‏ • العامل المختزَل: ‏Mg‏ (فقد إلكترونات) • العامل المؤكسِد: ‏H⁺‏ (اكتسبها). أيون الكلوريد لم يتغير - أيون متفرج.</div>
+</div>
+<div class="card">
+<h2>٢) تجربة: ساق زنك في محلول كبريتات النحاس</h2>
+<span class="pg">ص 261</span>
+<p>عند وضع ساق زنك في محلول ‏CuSO₄‏ الأزرق: تتآكل الساق تدريجياً، ويترسب النحاس على سطحها، ويختفي اللون الأزرق، وترتفع درجة حرارة المحلول.</p>
+<div class="eq">Zn + CuSO₄ ⟶ ZnSO₄ + Cu</div>
+<div class="reveal" data-a="r2">لماذا تتآكل ساق الزنك ويختفي اللون الأزرق؟ - اضغط للإجابة</div>
+<div class="ans" id="r2">الزنك أكثر نشاطاً من النحاس، فيتأكسد: ‏Zn ⟶ Zn²⁺ + 2e⁻‏ وتتآكل الساق. وتُختزَل كاتيونات النحاس: ‏Cu²⁺ + 2e⁻ ⟶ Cu‏ فيترسب النحاس ويختفي اللون الأزرق الخاص بكاتيوناته. والتفاعل طارد للحرارة فترتفع درجة حرارة المحلول.</div>
+</div>
+<div class="card">
+<h2>٣) لكن: هل تولّدت طاقة كهربية في التجربة السابقة؟</h2>
+<span class="pg">ص 262</span>
+<p><b>لا.</b> التلامس المباشر بين الزنك وكاتيونات النحاس جعل الطاقة الكيميائية تتحول إلى <b>طاقة حرارية</b>؛ لأن انتقال الإلكترونات تم مباشرة دون المرور في موصل خارجي.</p>
+<p>لتوليد تيار كهربي: نفصل العامل المؤكسِد عن العامل المختزَل في وعاءين منفصلين (نصفَي خلية)، ونسمح للإلكترونات بالانتقال عبر سلك خارجي - وهذا ما فعله العالم <b>دانيال</b>.</p>
+</div>
+<div class="card">
+<h2>٤) مصطلحات أساسية</h2>
+<span class="pg">ص 263–265</span>
+<p style="font-size:13px">اضغط كل مصطلح لقراءة تعريفه من الكتاب:</p>
+<div class="terms">
+<span data-d="t1">نصف الخلية (القطب الكهربي)</span>
+<span data-d="t2">الأنود (المصعد)</span>
+<span data-d="t3">الكاثود (المهبط)</span>
+<span data-d="t4">الإلكتروليت</span>
+<span data-d="t5">القطب الخامل</span>
+<span data-d="t6">الظروف القياسية</span>
+</div>
+<div class="termdef" id="t1">صفيحة أو ساق معدني مغمور في محلول أيوناته، ويكون بينه وبين أيوناته اتزان (ذوبان وترسيب). يُصنّف كاثوداً أو أنوداً حسب نشاطه.</div>
+<div class="termdef" id="t2">نصف الخلية الذي تحدث عنده الأكسدة؛ مصعد الإلكترونات للسلك (القطب السالب في الخلية الجلفانية). مثال: ساق الزنك في خلية دانيال.</div>
+<div class="termdef" id="t3">نصف الخلية الذي تحدث عنده عملية الاختزال؛ تهبط عليه الإلكترونات من السلك (القطب الموجب). مثال: ساق النحاس في خلية دانيال.</div>
+<div class="termdef" id="t4">محلول يحتوي أيونات موجبة وسالبة حرة الحركة قادرة على التوصيل الكهربي؛ قد يكون محلول ملح أو حمض أو قاعدة أو مصهور ملح أو أكسيد فلز.</div>
+<div class="termdef" id="t5">قطب من البلاتين أو الجرافيت غير قابل للتفاعل، موصل فقط؛ لا تتغير كتلته في الخلايا الجلفانية. يُستخدم عند الحاجة لساق صلبة كقطب لعنصر غير صلب (مثل قطب الهيدروجين).</div>
+<div class="termdef" id="t6">درجة حرارة 25°س، وضغط جوي 1، وتركيز أيونات الفلز في الإلكتروليت 1M.</div>
+</div>
+<div class="card">
+<h2>٥) خلية دانيال</h2>
+<span class="pg">ص 265</span>
+<p><b>الأنود (−):</b> ساق زنك في محلول كبريتات الزنك - تحدث الأكسدة:</p>
+<div class="eq">Zn ⟶ Zn²⁺ + 2e⁻</div>
+<p><b>الكاثود (+):</b> ساق نحاس في محلول كبريتات النحاس - يحدث الاختزال:</p>
+<div class="eq">Cu²⁺ + 2e⁻ ⟶ Cu</div>
+<p>الإلكترونات تنتقل من ساق الزنك عبر السلك الخارجي إلى ساق النحاس، ويسجل الفولتمتر ‏1.1 فولت‏ في الظروف القياسية.</p>
+<div class="reveal" data-a="r3">لماذا لا تعمل الخلية دون القنطرة الملحية؟ - اضغط للإجابة</div>
+<div class="ans" id="r3">دون قنطرة: تتراكم الأيونات الموجبة في وعاء الزنك (نصف خلية الأنود) والأيونات السالبة في وعاء النحاس، فلا تكتمل الدائرة ويتوقف التيار بعد لحظات. القنطرة الملحية (محلول إلكتروليتي مثل كلوريد البوتاسيوم) تسمح بانتقال الأيونات بين نصفي الخلية فتعادل الشحنات وتكتمل الدائرة الكهربية.</div>
+</div>
+</div>
+
+<!-- ============ TAB 3: EXERCISE ============ -->
+<div id="exr" class="tab">
+<div class="card">
+<h2>تمرين: حدّد الأقطاب والاتجاهات</h2>
+<span class="pg">ص 260–265</span>
+<p style="font-size:13px">في خلية جلفانية من الخارصين والنحاس (كخلية دانيال)، أجب ثم اضغط «تحقق»:</p>
+<p class="lbl" style="margin-top:8px">١) أي الساقين هو الأنود؟</p>
+<button class="opt ex" data-q="e1" data-c="0">ساق الخارصين ‏Zn</button>
+<button class="opt ex" data-q="e1" data-c="1">ساق النحاس ‏Cu</button>
+<p class="lbl">٢) ما اتجاه حركة الإلكترونات في السلك الخارجي؟</p>
+<button class="opt ex" data-q="e2" data-c="1">من النحاس إلى الخارصين</button>
+<button class="opt ex" data-q="e2" data-c="0">من الخارصين إلى النحاس</button>
+<p class="lbl">٣) ماذا يحدث داخل القنطرة الملحية؟</p>
+<button class="opt ex" data-q="e3" data-c="1">تتحرك الإلكترونات خلالها من الأنود إلى الكاثود</button>
+<button class="opt ex" data-q="e3" data-c="0">تتحرك الأيونات: الموجبة نحو الكاثود والسالبة نحو الأنود</button>
+<p class="lbl">٤) ماذا يحدث لكتلة ساق النحاس مع مرور الوقت؟</p>
+<button class="opt ex" data-q="e4" data-c="0">تزداد بترسيب النحاس عليها</button>
+<button class="opt ex" data-q="e4" data-c="1">تقل بذوبانها في المحلول</button>
+<div class="btnrow"><button class="btn" id="exCheck">تحقق</button></div>
+<div class="fb" id="exFb"></div>
+</div>
+<div class="card">
+<h2>تمرين: اكتب نصفَي التفاعل</h2>
+<span class="pg">ص 265</span>
+<p style="font-size:13px">رتّب ذهنياً ثم اعرض الإجابة للمراجعة الذاتية:</p>
+<div class="reveal" data-a="x1">نصف تفاعل الأكسدة (عند الأنود) - اضغط للإجابة</div>
+<div class="ans" id="x1" style="direction:ltr;text-align:center">Zn ⟶ Zn²⁺ + 2e⁻</div>
+<div class="reveal" data-a="x2">نصف تفاعل الاختزال (عند الكاثود) - اضغط للإجابة</div>
+<div class="ans" id="x2" style="direction:ltr;text-align:center">Cu²⁺ + 2e⁻ ⟶ Cu</div>
+</div>
+</div>
+
+<!-- ============ TAB 4: QUIZ ============ -->
+<div id="quiz" class="tab">
+<div class="scorebox" id="score"></div>
+<div id="quizBox"></div>
+<div class="btnrow"><button class="btn" id="retry">إعادة الاختبار</button></div>
+</div>
+
+<footer>
+نسخة تفاعلية تجريبية من درس واحد فقط - المصدر: كتاب الشرح «الكيمياء العامة» الجزء الأول (3 ثانوي، 2027)، الباب الرابع، الدرس الأول، الصفحات 257–265.<br>
+أُعدّت للاستخدام الخاص من نسخة الطالب - ليست للنشر أو التوزيع. تعمل دون اتصال بالإنترنت.
+</footer>
+<script>
+// ---------- tabs ----------
+function showTab(id){document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on')});document.getElementById(id).classList.add('on');document.querySelectorAll('nav button').forEach(function(b){b.classList.toggle('on',b.dataset.t===id)})}
+document.querySelectorAll('nav button').forEach(function(b){b.onclick=function(){showTab(b.dataset.t)}});
+// ---------- reveals ----------
+document.querySelectorAll('.reveal').forEach(function(r){r.onclick=function(){var a=document.getElementById(r.dataset.a);a.style.display=a.style.display==='block'?'none':'block'}});
+// ---------- terms ----------
+document.querySelectorAll('.terms span').forEach(function(s){s.onclick=function(){var d=document.getElementById(s.dataset.d);var open=d.style.display==='block';document.querySelectorAll('.termdef').forEach(function(x){x.style.display='none'});d.style.display=open?'none':'block'}});
+// ---------- simulation ----------
+var LRI='⁦',PDI='⁩';
+var wirePts=[[82,120],[82,52],[160,52],[180,52],[200,52],[278,52],[278,120]];
+function pathPoint(t){var segs=wirePts.length-1;var f=t*segs;var i=Math.min(Math.floor(f),segs-1);var r=f-i;var a=wirePts[i],b=wirePts[i+1];return[a[0]+(b[0]-a[0])*r,a[1]+(b[1]-a[1])*r]}
+var bridgeMid=function(t,dir){var x0=118,x1=242;var x=dir>0?x0+(x1-x0)*t:x1-(x1-x0)*t;var y=185-55*Math.sin(Math.PI*t);return[x,y]};
+var dotsG=document.getElementById('dots');
+var electrons=[],cats=[],ans=[],cuions=[],znions=[];
+function mkDot(cls,r,fill){var c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('r',r);c.setAttribute('fill',fill);dotsG.appendChild(c);return c}
+for(var i=0;i<6;i++){var e=mkDot('e',4,'#c92a2a');electrons.push({el:e,t:i/6})}
+for(var i=0;i<4;i++){var c=mkDot('c',3.5,'#2f9e44');cats.push({el:c,t:i/4});var a=mkDot('a',3.5,'#e67700');ans.push({el:a,t:i/4})}
+for(var i=0;i<5;i++){var u=mkDot('u',3,'#1c7ed6');cuions.push({el:u,x:230+Math.random()*60,y:180+Math.random()*70,t:Math.random()})}
+for(var i=0;i<4;i++){var z=mkDot('z',3,'#495057');znions.push({el:z,x:82,y:150+Math.random()*60,t:Math.random()})}
+var running=false,mode='cell',prog=0,nobridgeT=0;
+var voltText=document.getElementById('voltText'),needle=document.getElementById('needle');
+var simFb=document.getElementById('simFb');
+function setVolt(v,on){voltText.textContent=v;needle.setAttribute('transform',on?'rotate(55 180 52)':'rotate(-90 180 52)')}
+setVolt('0',false);
+function render(){
+electrons.forEach(function(o){var p=pathPoint(o.t%1);o.el.setAttribute('cx',p[0]);o.el.setAttribute('cy',p[1]);o.el.setAttribute('opacity',mode==='cell'?1:0)});
+cats.forEach(function(o){var p=bridgeMid(o.t%1,1);o.el.setAttribute('cx',p[0]);o.el.setAttribute('cy',p[1]);o.el.setAttribute('opacity',mode==='cell'?1:0)});
+ans.forEach(function(o){var p=bridgeMid(o.t%1,-1);o.el.setAttribute('cx',p[0]);o.el.setAttribute('cy',p[1]);o.el.setAttribute('opacity',mode==='cell'?1:0)});
+cuions.forEach(function(o){o.el.setAttribute('cx',o.x);o.el.setAttribute('cy',o.y);o.el.setAttribute('opacity',mode==='cell'?1:0)});
+znions.forEach(function(o){o.el.setAttribute('cx',o.x);o.el.setAttribute('cy',o.y);o.el.setAttribute('opacity',mode==='cell'?1:0)});
+// depletion visuals
+var zn=document.getElementById('znRod');var h=110-35*prog;zn.setAttribute('height',h);
+var cu=document.getElementById('cuRod');cu.setAttribute('width',16+6*prog);cu.setAttribute('x',270-3*prog);
+document.getElementById('cuSol').setAttribute('opacity',(0.5-0.32*prog).toFixed(2));
+}
+function tick(){
+if(running&&mode==='cell'){
+prog=Math.min(1,prog+0.0022);
+electrons.forEach(function(o){o.t+=0.012});
+cats.forEach(function(o){o.t+=0.006});
+ans.forEach(function(o){o.t+=0.006});
+cuions.forEach(function(o){var dx=272-o.x,dy=(140+70*Math.random())-o.y;o.x+=dx*0.03;o.y+= (190-o.y)*0.01;if(Math.abs(dx)<6){o.x=230+Math.random()*60;o.y=180+Math.random()*70}});
+znions.forEach(function(o){o.y+=0.6;o.x+=(Math.random()-0.5);if(o.y>255){o.x=80+Math.random()*6;o.y=150+Math.random()*20}});
+render();
+}}
+setInterval(tick,60);
+render();
+document.getElementById('runBtn').onclick=function(){
+if(mode==='direct'){simFb.className='fb no';simFb.textContent='في وضع التلامس المباشر لا يمر تيار في سلك خارجي - ارجع للخلية أولاً بزر إعادة.';return}
+running=!running;this.textContent=running?'إيقاف مؤقت':'تشغيل';
+if(mode==='nobridge'){
+setVolt('0',false);
+setTimeout(function(){if(mode==='nobridge'){running=false;document.getElementById('runBtn').textContent='تشغيل';
+document.getElementById('accum').setAttribute('opacity',1);
+simFb.className='fb no';simFb.textContent='بعد لحظات توقف التيار: تراكمت الأيونات الموجبة في نصف خلية الأنود والسالبة في نصف خلية الكاثود، فلا تكتمل الدائرة دون القنطرة الملحية (ص 265). أعد القنطرة بزر «إعادة».'}},2600);
+simFb.className='fb ok';simFb.textContent='أزلتَ القنطرة: لاحظ الفولتمتر - التيار يستمر لحظات قليلة ثم يتوقف...';
+}else{
+setVolt('1.1 V',true);
+simFb.className='fb ok';simFb.textContent='شاهد: الإلكترونات (حمراء) تتحرك في السلك من الزنك إلى النحاس، والأيونات تتحرك داخل القنطرة والمحلولين، وساق الزنك تتآكل بينما يترسّب النحاس ويفتقد المحلول لونه الأزرق تدريجياً (تمثيل توضيحي).';
+}};
+document.getElementById('resetBtn').onclick=function(){
+mode='cell';running=false;prog=0;
+document.getElementById('runBtn').textContent='تشغيل';
+document.getElementById('bridge').setAttribute('opacity',0.85);
+document.getElementById('bridgeLbl').setAttribute('opacity',1);
+document.getElementById('accum').setAttribute('opacity',0);
+document.getElementById('cellWrap').style.display='block';
+document.getElementById('directWrap').style.display='none';
+document.getElementById('bridgeBtn').textContent='أزل القنطرة الملحية';
+setVolt('0',false);simFb.className='fb';simFb.textContent='';render();
+};
+document.getElementById('bridgeBtn').onclick=function(){
+if(mode!=='cell')return;
+mode='nobridge';
+document.getElementById('bridge').setAttribute('opacity',0.12);
+document.getElementById('bridgeLbl').setAttribute('opacity',0.3);
+this.textContent='القنطرة مُزالة - شغّل ولاحظ';
+simFb.className='fb';simFb.textContent='';
+};
+document.getElementById('directBtn').onclick=function(){
+mode='direct';running=false;
+document.getElementById('cellWrap').style.display='none';
+document.getElementById('directWrap').style.display='block';
+document.getElementById('heat').setAttribute('opacity',1);
+setVolt('0',false);
+simFb.className='fb ok';simFb.textContent='تلامس مباشر (ص 261): الزنك يتأكسد والنحاس يترسب على الساق نفسها، واللون الأزرق يختفي - لكن الطاقة تتحول إلى حرارة فقط. لا يوجد سلك خارجي ينقل الإلكترونات، فلا يتولد تيار كهربي (ص 262).';
+// animate deposit specks
+var g=document.getElementById('dirDots');g.innerHTML='';
+for(var i=0;i<10;i++){var c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('r',2.5);c.setAttribute('fill','#b08d57');c.setAttribute('cx',165+Math.random()*18);c.setAttribute('cy',110+Math.random()*80);g.appendChild(c)}
+};
+// prediction
+document.querySelectorAll('#predBox .opt').forEach(function(b){b.onclick=function(){
+var fb=document.getElementById('predFb');
+if(b.dataset.p==='1'){b.classList.add('right');fb.className='fb ok';fb.textContent='توقع صحيح: الإلكترونات تتحرك في السلك الخارجي من الأنود (الزنك) إلى الكاثود (النحاس) - ص 265. شغّل المحاكاة وشاهد.'}
+else{b.classList.add('wrong');fb.className='fb no';fb.textContent='راجع: الأكسدة عند ساق الزنك (فقد إلكترونات)، فالإلكترونات تصعد من الزنك عبر السلك إلى النحاس. شغّل المحاكاة ولاحظ النقاط الحمراء.'}
+}});
+// ---------- exercise ----------
+var exAns={};
+document.querySelectorAll('.opt.ex').forEach(function(b){b.onclick=function(){
+document.querySelectorAll('.opt.ex[data-q="'+b.dataset.q+'"]').forEach(function(x){x.style.borderColor='#cbd5e0';x.style.background='#f7fafc'});
+b.style.borderColor='#1464a0';b.style.background='#e8f0fe';exAns[b.dataset.q]=b.dataset.c;
+}});
+document.getElementById('exCheck').onclick=function(){
+var fb=document.getElementById('exFb');
+var n=Object.keys(exAns).length;
+if(n<4){fb.className='fb no';fb.textContent='أجب الأسئلة الأربعة أولاً.';return}
+var right=0;['e1','e2','e3','e4'].forEach(function(q){if(exAns[q]==='0')right++});
+if(right===4){fb.className='fb ok';fb.textContent='أحسنت - كلها صحيحة: الأنود هو الزنك (أكسدة)، والإلكترونات تتحرك منه في السلك إلى النحاس، والأيونات (وليست الإلكترونات) تتحرك في القنطرة، وكتلة النحاس تزداد بالترسيب.'}
+else{fb.className='fb no';fb.textContent='صحيح '+right+' من 4. راجع الشرح: الأكسدة عند الأنود (الزنك يفقد إلكترونات تصعد للسلك)، والاختزال عند الكاثود (ترسيب النحاس)، والقنطرة تمرر أيونات فقط.'}
+};
+// ---------- quiz ----------
+var QUIZ=[
+{q:'في تجربة ساق الزنك في محلول كبريتات النحاس (ص 261)، ماذا يحدث للطاقة الكيميائية؟',o:['تتحول إلى طاقة كهربية','تتحول إلى طاقة حرارية','تتحول إلى طاقة ضوئية','لا يحدث تفاعل أصلاً'],c:1,w:'التلامس المباشر يجعل الطاقة الكيميائية تتحول إلى حرارة - ولا يتولد تيار لأن الإلكترونات لا تمر في موصل خارجي (ص 262).'},
+{q:'الأنود في خلية دانيال هو:',o:['ساق النحاس - القطب الموجب','ساق الخارصين - القطب السالب','القنطرة الملحية','محلول كبريتات النحاس'],c:1,w:'الأنود (المصعد) هو ساق الخارصين: تحدث عنده الأكسدة Zn ⟶ Zn²⁺ + 2e⁻ وهو القطب السالب (ص 265).'},
+{q:'اتجاه حركة الإلكترونات في السلك الخارجي لخلية دانيال:',o:['من النحاس إلى الخارصين','من الخارصين إلى النحاس','من القنطرة إلى السلك','لا تتحرك في السلك'],c:1,w:'الإلكترونات تصعد من الأنود (Zn) عبر السلك الخارجي إلى الكاثود (Cu) - ص 265.'},
+{q:'وظيفة القنطرة الملحية في الخلية الجلفانية:',o:['توصيل الإلكترونات بين القطبين','زيادة فرق الجهد','السماح بانتقال الأيونات لمعادلة الشحنات وإكمال الدائرة','منع تفاعل الزنك مع النحاس'],c:2,w:'القنطرة محلول إلكتروليتي يسمح بحركة الأيونات (وليس الإلكترونات) بين نصفي الخلية فتعادل الشحنات المتراكمة ويستمر التيار (ص 265).'},
+{q:'نصف تفاعل الاختزال في خلية دانيال:',o:['Zn ⟶ Zn²⁺ + 2e⁻','Cu²⁺ + 2e⁻ ⟶ Cu','Cu ⟶ Cu²⁺ + 2e⁻','Zn²⁺ + 2e⁻ ⟶ Zn'],c:1,w:'الاختزال يحدث عند الكاثود (النحاس): Cu²⁺ + 2e⁻ ⟶ Cu فيترسب النحاس وتزداد كتلة الساق (ص 265).'},
+{q:'عند إزالة القنطرة الملحية من خلية تعمل:',o:['يستمر التيار دون تغيير','يتوقف التيار فوراً قبل أي تفاعل','يتوقف التيار بعد لحظات بسبب تراكم الشحنات','ينعكس اتجاه التيار'],c:2,w:'بدون القنطرة تتراكم الأيونات الموجبة في نصف خلية الأنود والسالبة في نصف خلية الكاثود فيتوقف التيار بعد لحظات - فلا تكتمل الدائرة (ص 265).'},
+{q:'في خلية دانيال، العامل المختزَل هو:',o:['أيونات ‏Cu²⁺','ساق النحاس','ساق الخارصين ‏Zn','القنطرة الملحية'],c:2,w:'العامل المختزَل يفقد إلكترونات (يتأكسد): ساق الخارصين Zn ⟶ Zn²⁺ + 2e⁻ (ص 260 و265).'},
+{q:'قراءة الفولتمتر ‏1.1 فولت‏ في خلية دانيال تكون في:',o:['أي ظروف مهما تغير التركيز','الظروف القياسية: تركيز 1M ودرجة حرارة 25°س','عند إزالة القنطرة الملحية','تجربة التلامس المباشر'],c:1,w:'الجهود المسجلة في المتسلسلة قيم قياسية عند الظروف القياسية (1M و25°س) وتتغير بتغير التركيز ودرجة الحرارة (ص 264–265 و276).'}
+];
+var right=0,answered=0;
+function buildQuiz(){right=0;answered=0;document.getElementById('score').textContent='';var box=document.getElementById('quizBox');box.innerHTML='';
+QUIZ.forEach(function(qq,qi){var div=document.createElement('div');div.className='qcard';
+var h=document.createElement('h3');h.textContent='س'+(qi+1)+': '+qq.q;div.appendChild(h);
+qq.o.forEach(function(op,oi){var b=document.createElement('button');b.className='opt';b.innerHTML=op;
+b.onclick=function(){if(div.dataset.done)return;div.dataset.done='1';answered++;
+if(oi===qq.c){right++;b.classList.add('right')}else{b.classList.add('wrong');div.querySelectorAll('.opt')[qq.c].classList.add('right')}
+var ex=document.createElement('div');ex.className='note';ex.style.display='block';ex.textContent='التفسير: '+qq.w;div.appendChild(ex);
+if(answered===QUIZ.length)document.getElementById('score').textContent='النتيجة: '+right+' من '+QUIZ.length+(right>=7?' - ممتاز!':right>=5?' - جيد، راجع الأخطاء':' - أعد قراءة الشرح وحاول مجدداً')};
+div.appendChild(b)});box.appendChild(div)})}
+document.getElementById('retry').onclick=buildQuiz;buildQuiz();
+// deep-link tab + self test
+var h=location.hash;
+if(h.indexOf('tab=')>-1){var t=h.match(/tab=(\w+)/)[1];if(document.getElementById(t))showTab(t)}
+if(h.indexOf('rundemo')>-1){document.getElementById('runBtn').click()}
+if(h.indexOf('nobridgedemo')>-1){document.getElementById('bridgeBtn').click();document.getElementById('runBtn').click()}
+if(h.indexOf('directdemo')>-1){document.getElementById('directBtn').click()}
+if(h.indexOf('selftest')>-1){var out=[];
+function T(name,cond){out.push((cond?'PASS ':'FAIL ')+name)}
+T('tabs=4',document.querySelectorAll('nav button').length===4);
+T('quiz questions=8',document.querySelectorAll('.qcard').length===8);
+T('options per q=4',document.querySelectorAll('.qcard')[0].querySelectorAll('.opt').length===4);
+T('reveals=5',document.querySelectorAll('.reveal').length===5);
+T('terms=6',document.querySelectorAll('.terms span').length===6);
+T('sim svg exists',!!document.getElementById('cellSvg'));
+// simulate: run cell, electrons move
+var e0=electrons[0].t;document.getElementById('runBtn').click();
+T('cell runs',running===true&&document.getElementById('voltText').textContent==='1.1 V');
+// simulate: answer Q1 correctly (index1)
+document.querySelectorAll('.qcard')[0].querySelectorAll('.opt')[1].click();
+T('q1 right marked',document.querySelectorAll('.qcard')[0].querySelectorAll('.opt')[1].classList.contains('right'));
+T('explain shown',document.querySelectorAll('.qcard')[0].querySelectorAll('.note').length===1);
+// exercise: answer all correct
+document.querySelector('.opt.ex[data-q=e1][data-c="0"]').click();
+document.querySelector('.opt.ex[data-q=e2][data-c="0"]').click();
+document.querySelector('.opt.ex[data-q=e3][data-c="0"]').click();
+document.querySelector('.opt.ex[data-q=e4][data-c="0"]').click();
+document.getElementById('exCheck').click();
+T('exercise accepted',document.getElementById('exFb').className==='fb ok');
+// exercise wrong path
+exAns['e1']='1';document.getElementById('exCheck').click();
+T('exercise rejects wrong',document.getElementById('exFb').className==='fb no');
+// direct contact scene
+document.getElementById('directBtn').click();
+T('direct scene shows',document.getElementById('directWrap').style.display==='block'&&mode==='direct');
+// reset back
+document.getElementById('resetBtn').click();
+T('reset restores',mode==='cell'&&document.getElementById('cellWrap').style.display==='block');
+// no horizontal overflow
+T('no h-overflow',document.documentElement.scrollWidth<=window.innerWidth);
+var pre=document.createElement('pre');pre.id='selftest';pre.style.cssText='position:fixed;top:0;left:0;background:#000;color:#0f0;z-index:99;padding:8px;font-size:12px;direction:ltr';
+pre.textContent=out.join('\n');document.body.appendChild(pre)}
+</script>
+</body>
+</html>
